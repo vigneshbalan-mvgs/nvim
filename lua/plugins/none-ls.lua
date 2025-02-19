@@ -9,11 +9,13 @@ return {
 					filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "json", "yaml", "markdown" },
 				}),
 
-				null_ls.builtins.diagnostics.eslint_lsp,
+				-- null_ls.builtins.diagnostics.eslint, -- Corrected from `ts_ls` to `eslint`
 			}
 		})
 
 		-- Keymap for formatting
-		vim.keymap.set('n', '<leader>gf', vim.lsp.buf.format, {})
+		vim.keymap.set('n', '<leader>gf', function()
+			vim.lsp.buf.format({ async = true })
+		end, {})
 	end
 }

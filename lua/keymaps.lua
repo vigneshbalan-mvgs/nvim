@@ -36,8 +36,8 @@ vim.keymap.set("n", "gS", ":Telescope lsp_workspace_symbols<CR>", { desc = "Work
 vim.keymap.set("n", "td", ":Telescope diagnostics<CR>", { desc = "Workspace Symbols" })
 
 -- Commenting (Using vim-commentary)
-vim.keymap.set("n", "<C-/>", ":Commentary<CR>", { desc = "Toggle Comment" })
-vim.keymap.set("v", "<C-/>", ":Commentary<CR>", { desc = "Toggle Comment (Visual)" })
+vim.keymap.set("n", "<A-/>", ":Commentary<CR>", { desc = "Toggle Comment" })
+vim.keymap.set("v", "<A-/>", ":Commentary<CR>", { desc = "Toggle Comment (Visual)" })
 
 -- Better Navigation
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Join Lines Without Moving Cursor" })
@@ -81,3 +81,8 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" }
 
 --toggle relativenumber
 vim.keymap.set("n", "<leader>rn", ":set relativenumber!<CR>", { desc = "Toggle Relative Number" })
+
+
+--terminal
+
+vim.keymap.set("n", "<leader>tt", ":ToggleTerm direction=float size=20<CR>", { desc = "ToggleTerm" })
