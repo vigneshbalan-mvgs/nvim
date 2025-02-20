@@ -11,8 +11,6 @@ return {
 		local session_manager = require("session_manager")
 
 		dashboard.section.header.val = {
-
-
 			[[          _____                    _____                    _____                    _____          ]],
 			[[         /\    \                  /\    \                  /\    \                  /\    \         ]],
 			[[        /::\____\                /::\____\                /::\    \                /::\    \        ]],
@@ -40,12 +38,12 @@ return {
 
 		-- Dashboard Buttons
 		dashboard.section.buttons.val = {
-			dashboard.button("s", "📁  Last Session", ":SessionManager load_last_session<CR>"),
-			dashboard.button("l", "🗂  Load Session", ":SessionManager load_session<CR>"),
-			dashboard.button("c", "⚙️  Config", ":e ~/.config/nvim/init.lua<CR>"),
-			dashboard.button("k", "⌨️  Keymaps", ":e ~/.config/nvim/lua/keymaps.lua<CR>"),
-			dashboard.button("r", "🕘  Recent Files", ":Telescope oldfiles<CR>"),
-			dashboard.button("q", "❌  Quit Neovim", ":qa<CR>")
+			dashboard.button("s", "Last Session", ":SessionManager load_last_session<CR>"),
+			dashboard.button("l", "List Session", ":SessionManager load_session<CR>"),
+			dashboard.button("c", "Config", ":e ~/.config/nvim/init.lua<CR>"),
+			dashboard.button("k", "Keymaps", ":e ~/.config/nvim/lua/keymaps.lua<CR>"),
+			dashboard.button("r", "Recent", ":Telescope oldfiles<CR>"),
+			dashboard.button("q", "Quit", ":qa<CR>")
 		}
 
 		-- Apply Dashboard Settings

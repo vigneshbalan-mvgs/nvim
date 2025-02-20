@@ -4,17 +4,24 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.clipboard = "unnamedplus" -- Use system clipboard
-vim.opt.number =false 
-vim.opt.relativenumber = true -- Relative line numbers
-vim.opt.cursorline = false -- Highlight the current line
-vim.opt.signcolumn = "yes" -- Always show sign column
-vim.opt.termguicolors = true -- Enable 24-bit color
-vim.opt.scrolloff = 8 -- Keep cursor 8 lines away from screen edge
-vim.opt.updatetime = 250 -- Faster updates
-vim.opt.ignorecase = true -- Case insensitive search
-vim.opt.smartcase = true -- Smart case sensitivity
-vim.opt.hlsearch = true -- Highlight search results
-vim.opt.incsearch = true -- Incremental search
+vim.opt.number = true
+vim.opt.relativenumber = true     -- Relative line numbers
+vim.opt.cursorline = false        -- Highlight the current line
+vim.opt.signcolumn = "yes"        -- Always show sign column
+vim.opt.termguicolors = true      -- Enable 24-bit color
+vim.opt.scrolloff = 8             -- Keep cursor 8 lines away from screen edge
+vim.opt.updatetime = 250          -- Faster updates
+vim.opt.ignorecase = true         -- Case insensitive search
+vim.opt.smartcase = true          -- Smart case sensitivity
+vim.opt.hlsearch = true           -- Highlight search results
+vim.opt.incsearch = true          -- Incremental search
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	callback = function()
+		vim.lsp.buf.format()
+	end
+})
+
 
 require("keymaps")
 

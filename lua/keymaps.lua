@@ -14,7 +14,7 @@ vim.keymap.set("i", "<A-k>", "<C-p>", { desc = "Previous Completion Item" })
 -- Toggle File Explorer (Neo-tree)
 -- vim.keymap.set("n", "<leader>e", ":Neotree reveal_force_cwd toggle<CR>", { desc = "Toggle File Explorer" })
 vim.keymap.set("n", "<leader>e", ":Neotree reveal_force_cwd toggle<CR>", { desc = "Toggle File Explorer" })
-vim.keymap.set("n", "<leader>gg", ":Neotree git_status  toggle<CR>", { desc = "Toggle Git Status" })
+vim.keymap.set("n", "<leader>gg", ":Neotree git_status float  toggle<CR>", { desc = "Toggle Git Status" })
 
 -- Buffer Navigation (Using Bufferline)
 vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
@@ -70,6 +70,7 @@ vim.keymap.set("n", "<A-K>", ":resize +2<CR>", { desc = "Increase window height"
 vim.keymap.set("n", "<A-J>", ":resize -2<CR>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<A-H>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<A-L>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+
 --lsp formatting
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format File" })
 
@@ -84,5 +85,4 @@ vim.keymap.set("n", "<leader>rn", ":set relativenumber!<CR>", { desc = "Toggle R
 
 
 --terminal
-
-vim.keymap.set("n", "<leader>tt", ":ToggleTerm direction=float size=20<CR>", { desc = "ToggleTerm" })
+vim.keymap.set("n", "<leader>tt", ":ToggleTerm direction=float size=10<CR>", { desc = "ToggleTerm" })

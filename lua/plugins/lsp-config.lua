@@ -25,9 +25,6 @@ return {
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 			local lspconfig = require("lspconfig")
-			lspconfig.ts_ls.setup({
-capabilities = capabilities
-			})
 			local servers = {
 				"lua_ls",
 				"ts_ls",
@@ -36,16 +33,27 @@ capabilities = capabilities
 				"jsonls",
 			}
 
-			for _, server in ipairs(servers) do
-				lspconfig[server].setup({})
+			local on_attach = function(client, bufnr)
+				-- -- Set up keybindings for the LSP client
+				-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", ":lua vim.lsp.buf.definition()<CR>",
+				-- 	{ noremap = true, silent = true })
+				-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":lua vim.lsp.buf.references()<CR>",
+				-- 	{ noremap = true, silent = true })
+				vim.api.nvim_buf_set_keymap(bufnr, "n", "K", ":lua vim.lsp.buf.hover()<CR>",
+					{ noremap = true, silent = true })
 			end
 
-			-- LSP Keymaps
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-			-- vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
-			-- vim.keymap.set("n", "ga", vim.lsp.buf.code_action, {})
+			for _, server in ipairs(servers) do
+				lspconfig[server].setup({
+					capabilities = capabilities,
+					completion = {
+						complete = function()
+							vim.fn.call('cmp#complete', {})
+						end,
+					},
+					on_attach = on_attach,
+				})
+			end
 		end
 	},
 }
-
