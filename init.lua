@@ -16,13 +16,6 @@ vim.opt.smartcase = true          -- Smart case sensitivity
 vim.opt.hlsearch = true           -- Highlight search results
 vim.opt.incsearch = true          -- Incremental search
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	callback = function()
-		vim.lsp.buf.format()
-	end
-})
-
-
 require("keymaps")
 
 -- Lazy.nvim bootstrap
