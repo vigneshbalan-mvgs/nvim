@@ -4,7 +4,7 @@ return {
     tag = "0.1.6",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-ui-select.nvim", -- include the extension as a dependency
+			"nvim-telescope/telescope-ui-select.nvim", -- include the extension as a dependency
     },
     config = function()
       local actions = require("telescope.actions")

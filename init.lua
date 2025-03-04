@@ -15,8 +15,22 @@ vim.opt.ignorecase = true         -- Case insensitive search
 vim.opt.smartcase = true          -- Smart case sensitivity
 vim.opt.hlsearch = true           -- Highlight search results
 vim.opt.incsearch = true          -- Incremental search
+vim.opt.wrap =false 
+vim.opt.breakindent = false
+vim.opt.linebreak = true
+vim.opt.cmdheight = 0
+
+
 
 require("keymaps")
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*",
+    callback = function()
+        require("session_manager").save_current_session()
+    end,
+})
+
 
 -- Lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

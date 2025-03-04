@@ -43,6 +43,7 @@ return {
 			dashboard.button("c", "Config", ":e ~/.config/nvim/init.lua<CR>"),
 			dashboard.button("k", "Keymaps", ":e ~/.config/nvim/lua/keymaps.lua<CR>"),
 			dashboard.button("r", "Recent", ":Telescope oldfiles<CR>"),
+			-- dashboard.button("", "Lazy", ":Lazy<CR>"),
 			dashboard.button("q", "Quit", ":qa<CR>")
 		}
 

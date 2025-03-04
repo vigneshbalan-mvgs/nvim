@@ -1,0 +1,27 @@
+return {
+	-- {
+	-- 	"github/copilot.vim",
+	-- },
+	-- {
+	-- 	"CopilotC-Nvim/CopilotChat.nvim",
+	-- 	dependencies = {
+	-- 		{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+	-- 		{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+	-- 	},
+	-- 	config = function()
+	-- 		require("CopilotChat").setup({
+	-- 			window = {
+	-- 				layout = "float",      -- Use a floating window
+	-- 				border = "rounded",    -- Options: "single", "double", "rounded", etc.
+	-- 				relative = "editor",   -- Positions relative to the editor
+	-- 				width = 0.5,           -- 50% of the editor width (or an absolute value)
+	-- 				height = 0.5,          -- 50% of the editor height (or an absolute value)
+	-- 				row = nil,             -- nil centers the window vertically
+	-- 				col = nil,             -- nil centers the window horizontally
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- 	build = "make tiktoken", -- Only on MacOS or Linux
+	-- 	opts = {},
+	-- },
+}

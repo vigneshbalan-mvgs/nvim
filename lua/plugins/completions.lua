@@ -1,10 +1,7 @@
 return {
 	{
 		"hrsh7th/cmp-nvim-lsp",
-		opts = {
-			lazy_load = true,
-			-- other setup options
-		},
+
 	},
 	{
 		"L3MON4D3/LuaSnip",
@@ -12,17 +9,9 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"rafamadriz/friendly-snippets",
 		},
-		opts = {
-			lazy_load = true,
-			-- other setup options
-		},
 	},
 	{
 		"hrsh7th/nvim-cmp",
-		opts = {
-			lazy_load = true,
-			-- other setup options
-		},
 		config = function()
 			local cmp = require("cmp")
 			require("luasnip.loaders.from_vscode").lazy_load()
@@ -109,7 +98,6 @@ return {
 				},
 			})
 
-			print("nvim-cmp config loaded")
 		end,
 	},
 }

@@ -1,9 +1,5 @@
 return {
 	"nvimtools/none-ls.nvim",
-	opts = {
-		lazy_load = true,
-		-- other setup options
-	},
 	config = function()
 		local null_ls = require("null-ls")
 
