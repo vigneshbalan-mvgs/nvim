@@ -1,5 +1,13 @@
 vim.g.mapleader = " "
 
+vim.opt.tabstop = 2        -- Number of spaces a tab counts for
+vim.opt.shiftwidth = 2     -- Number of spaces for indentation
+vim.opt.softtabstop = 2    -- Number of spaces when pressing <Tab>
+vim.opt.expandtab = true   -- Convert tabs to spaces
+
+
+
+
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
