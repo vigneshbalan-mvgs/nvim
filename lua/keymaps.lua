@@ -93,4 +93,3 @@ vim.keymap.set("n", "<leader>tt", ":ToggleTerm direction=float size=10<CR>", { d
 -- vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", { desc = "Open Copilot panel" })
 -- vim.keymap.set("n", "<leader>cs", ":Copilot status<CR>", { desc = "Show Copilot status" })
 -- vim.keymap.set("i", "<Tab>", ":Copilot accept<CR>", { desc = "Accept Copilot suggestion" })
-
