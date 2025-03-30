@@ -40,6 +40,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(ev)
+--     local client = vim.lsp.get_client_by_id(en.data.client_id)
+--     if client:supports_method('textDocument/completion') then
+--       vim.lsp.completion.enable(true, client.id, en.buf, { autotrigger = true })
+--     end
+--   end,
+-- })
+
+
 -- Lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
