@@ -1,139 +1,207 @@
 return {
-  -- Mason: Manage external tooling including LSP servers.
-  {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
-  },
-  -- Mason LSPConfig Bridge: Automatically installs and links LSP servers.
-  {
-    "williamboman/mason-lspconfig.nvim",
-    config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "lua_ls", -- Lua language server (for Neovim config)
-          "ts_ls",  -- TypeScript/JavaScript language server (powered by tsserver)
-          "html",   -- Uses vscode-html-languageserver-bin
-          "cssls",  -- Uses vscode-css-languageserver-bin
-          "jsonls", -- Uses vscode-json-languageserver
-        },
-        automatic_installation = true,
-      })
-    end,
-  },
-  -- Neovim LSPConfig: Configures the LSP servers.
+  -- LSP Config & Mason
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require("lspconfig")
+      local lspconfig_defaults = require("lspconfig").util.default_config
+      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+        "force",
+        lspconfig_defaults.capabilities,
+        require("cmp_nvim_lsp").default_capabilities()
+      )
 
-      -- Define common on_attach function with VSCode-like keybindings.
-      local on_attach = function(client, bufnr)
-        local opts = { noremap = true, silent = true, buffer = bufnr }
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-      end
+      vim.api.nvim_create_autocmd("LspAttach", {
+        desc = "LSP actions",
+        callback = function(event)
+          local opts = { buffer = event.buf }
+          local map = vim.keymap.set
+          map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+          map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
+          map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
+          map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
+          map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
+          map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
+          map("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+          map("n", "<leader>vd", "<cmd>lua vim.diagnostic.open_float()<cr>", { desc = "View Diagnostics" })
+          map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+          map({ "n", "x" }, "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
+          map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+        end,
 
-      -- Setup Lua LSP for Neovim configuration.
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
       })
 
-      -- Setup TypeScript/JavaScript LSP with inlay hints (VSCode-like experience).
-      lspconfig.ts_ls.setup({
-        capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          -- Disable built-in formatting to allow external tools (e.g., Prettier via null-ls).
-          client.server_capabilities.documentFormattingProvider = false
-          on_attach(client, bufnr)
-        end,
-        settings = {
-          typescript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayVariableTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayReturnTypeHints = true,
-            },
-          },
-          javascript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayVariableTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayReturnTypeHints = true,
-            },
-          },
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "cssls",
+          "vtsls",
+          "cssmodules_ls",
+          "tailwindcss",
+          "lua_ls",
         },
       })
 
-      -- Setup HTML LSP (vscode-html-languageserver).
-      lspconfig.html.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- Setup CSS LSP (vscode-css-languageserver).
-      lspconfig.cssls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- Setup JSON LSP (vscode-json-languageserver).
-      lspconfig.jsonls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
+      require("mason-lspconfig").setup_handlers({
+        function(server_name)
+          require("lspconfig")[server_name].setup({})
+        end,
+        ["vtsls"] = function()
+          require("lspconfig").vtsls.setup({
+            root_dir = require("lspconfig").util.root_pattern(
+              ".git",
+              "pnpm-workspace.yaml",
+              "pnpm-lock.yaml",
+              "yarn.lock",
+              "package-lock.json",
+              "bun.lockb"
+            ),
+            typescript = {
+              tsserver = {
+                maxTsServerMemory = 12288,
+              },
+            },
+            experimental = {
+              completion = {
+                entriesLimit = 3,
+              },
+            },
+          })
+        end,
       })
     end,
   },
-  -- Null-ls for ESLint & Prettier
+
+  -- Autocompletion + Snippets
   {
-    "nvimtools/none-ls.nvim", -- Alternatively, "jose-elias-alvarez/null-ls.nvim"
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-path",
+    },
+    config = function()
+      local cmp = require("cmp")
+      local cmp_select = { behavior = cmp.SelectBehavior.Insert }
+      cmp.setup({
+        sources = {
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+          { name = "path" },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+          ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+          ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<Tab>"] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
+          ["<S-Tab>"] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert }),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+      })
+    end,
+  },
+
+  -- React/React Native Snippets
+  {
+    "rafamadriz/friendly-snippets",
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load()
+    end,
+  },
+
+  -- Treesitter
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = {
+          "javascript",
+          "typescript",
+          "tsx",
+          "json",
+          "lua",
+          "css",
+          "html",
+        },
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end,
+  },
+
+  -- Null-ls for prettier & eslint
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local null_ls = require("null-ls")
-
       null_ls.setup({
         sources = {
-          -- Prettier for formatting.
-          null_ls.builtins.formatting.prettier.with({
-            filetypes = {
-              "javascript",
-              "typescript",
-              "javascriptreact",
-              "typescriptreact",
-              "json",
-              "markdown",
-              "html",
-              "css",
-            },
-          }),
-          -- ESLint for diagnostics and code actions.
+          null_ls.builtins.formatting.prettier,
           null_ls.builtins.diagnostics.eslint_d,
           null_ls.builtins.code_actions.eslint_d,
         },
       })
+    end,
+  },
 
-      -- Auto-format on save.
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function()
-          vim.lsp.buf.format({ async = false })
-        end,
+  -- TailwindCSS Color Highlighting
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
       })
+    end,
+  },
 
-      -- Manual Formatting Shortcut.
-      vim.keymap.set("n", "<leader>gf", function()
-        print("Formatting with null-ls…")
-        vim.lsp.buf.format({
-          async = true,
-          filter = function(client)
-            return client.name == "null-ls"
-          end,
-        })
-      end, {})
+  -- File Explorer
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup()
+    end,
+  },
+
+  -- Telescope
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("telescope").setup()
+    end,
+  },
+
+  -- Icons
+  { "nvim-tree/nvim-web-devicons" },
+
+  -- Statusline
+  {
+    "nvim-lualine/lualine.nvim",
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "auto",
+          section_separators = "",
+          component_separators = "",
+        },
+      })
+    end,
+  },
+
+  -- Terminal Integration
+  {
+    "akinsho/toggleterm.nvim",
+    config = function()
+      require("toggleterm").setup()
     end,
   },
 }
