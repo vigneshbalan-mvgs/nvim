@@ -21,16 +21,6 @@ return {
           local opts = { buffer = event.buf }
           local map = vim.keymap.set
           map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-          map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-          map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-          map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-          map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-          map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-          map("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-          map("n", "<leader>vd", "<cmd>lua vim.diagnostic.open_float()<cr>", { desc = "View Diagnostics" })
-          map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-          map({ "n", "x" }, "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
-          map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
         end,
 
       })
@@ -99,8 +89,6 @@ return {
           ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
           ["<C-Space>"] = cmp.mapping.complete(),
-          ["<Tab>"] = cmp.mapping.select_next_item({ behaviour = cmp.SelectBehavior.Insert }),
-          ["<S-Tab>"] = cmp.mapping.select_prev_item({ behaviour = cmp.SelectBehavior.Insert }),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
         }),
       })
@@ -149,59 +137,6 @@ return {
           null_ls.builtins.code_actions.eslint_d,
         },
       })
-    end,
-  },
-
-  -- TailwindCSS Color Highlighting
-  {
-    "roobert/tailwindcss-colorizer-cmp.nvim",
-    config = function()
-      require("tailwindcss-colorizer-cmp").setup({
-        color_square_width = 2,
-      })
-    end,
-  },
-
-  -- File Explorer
-  {
-    "nvim-tree/nvim-tree.lua",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("nvim-tree").setup()
-    end,
-  },
-
-  -- Telescope
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("telescope").setup()
-    end,
-  },
-
-  -- Icons
-  { "nvim-tree/nvim-web-devicons" },
-
-  -- Statusline
-  {
-    "nvim-lualine/lualine.nvim",
-    config = function()
-      require("lualine").setup({
-        options = {
-          theme = "auto",
-          section_separators = "",
-          component_separators = "",
-        },
-      })
-    end,
-  },
-
-  -- Terminal Integration
-  {
-    "akinsho/toggleterm.nvim",
-    config = function()
-      require("toggleterm").setup()
     end,
   },
 }
