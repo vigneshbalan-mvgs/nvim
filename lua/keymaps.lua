@@ -93,3 +93,28 @@ vim.keymap.set("n", "<leader>tt", ":ToggleTerm direction=float size=10<CR>", { d
 -- vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", { desc = "Open Copilot panel" })
 -- vim.keymap.set("n", "<leader>cs", ":Copilot status<CR>", { desc = "Show Copilot status" })
 -- vim.keymap.set("i", "<Tab>", ":Copilot accept<CR>", { desc = "Accept Copilot suggestion" })
+
+function RunCurrentJavaFile()
+  -- Save current file first
+  vim.cmd('write')
+
+  -- Get the full path and filename without extension
+  local filepath = vim.fn.expand('%:p')
+  local filename = vim.fn.expand('%:t:r')
+
+  -- Compile the Java file
+  local compile_cmd = 'javac ' .. filepath
+  local compile_result = vim.fn.system(compile_cmd)
+
+  if vim.v.shell_error ~= 0 then
+    print("Compilation failed:\n" .. compile_result)
+    return
+  end
+
+  -- Run the compiled Java class
+  local run_cmd = 'java -cp ' .. vim.fn.expand('%:p:h') .. ' ' .. filename
+  -- Open a terminal split to run it
+  vim.cmd('belowright 10split | terminal ' .. run_cmd)
+end
+
+vim.api.nvim_set_keymap('n', '<A-t>', ':lua RunCurrentJavaFile()<CR>', { noremap = true, silent = true })

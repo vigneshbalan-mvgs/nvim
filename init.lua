@@ -40,7 +40,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
-
 -- vim.api.nvim_create_autocmd('LspAttach', {
 --   callback = function(ev)
 --     local client = vim.lsp.get_client_by_id(en.data.client_id)
