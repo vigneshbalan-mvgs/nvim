@@ -36,33 +36,38 @@ return {
         },
       })
 
-      require("mason-lspconfig").setup_handlers({
-        function(server_name)
-          require("lspconfig")[server_name].setup({})
-        end,
-        ["vtsls"] = function()
-          require("lspconfig").vtsls.setup({
-            root_dir = require("lspconfig").util.root_pattern(
-              ".git",
-              "pnpm-workspace.yaml",
-              "pnpm-lock.yaml",
-              "yarn.lock",
-              "package-lock.json",
-              "bun.lockb"
-            ),
-            typescript = {
-              tsserver = {
-                maxTsServerMemory = 12288,
+      -- Replace the direct call to mason-lspconfig.setup_handlers with a guarded version.
+      local ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+      if ok and type(mason_lspconfig.setup_handlers) == "function" then
+        mason_lspconfig.setup_handlers({
+          -- Default handler for all installed servers
+          function(server_name)
+            require("lspconfig")[server_name].setup({})
+          end,
+          ["vtsls"] = function()
+            require("lspconfig").vtsls.setup({
+              root_dir = require("lspconfig").util.root_pattern(
+                ".git",
+                "pnpm-workspace.yaml",
+                "pnpm-lock.yaml",
+                "yarn.lock",
+                "package-lock.json",
+                "bun.lockb"
+              ),
+              typescript = {
+                tsserver = {
+                  maxTsServerMemory = 12288,
+                },
               },
-            },
-            experimental = {
-              completion = {
-                entriesLimit = 3,
+              experimental = {
+                completion = {
+                  entriesLimit = 3,
+                },
               },
-            },
-          })
-        end,
-      })
+            })
+          end,
+        })
+      end
     end,
   },
 
@@ -140,3 +145,4 @@ return {
     end,
   },
 }
+        

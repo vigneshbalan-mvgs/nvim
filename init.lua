@@ -28,6 +28,9 @@ vim.opt.wrap = false
 vim.opt.breakindent = false
 vim.opt.linebreak = true
 vim.opt.cmdheight = 0
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false -- start with folds open
 
 
 
